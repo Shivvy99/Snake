@@ -11,7 +11,6 @@ public class SnakeObject extends Polygon {
     }
 
     public void paint() {
-        Point[] snakePoints = this.getPoints();
 
         double[] xPoints = new double[snakePoints.length];
         for (int i = 0; i < xPoints.length; i++) {
