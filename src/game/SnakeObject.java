@@ -15,7 +15,12 @@ public class SnakeObject extends Polygon {
 
         double[] xPoints = new double[snakePoints.length];
         for (int i = 0; i < xPoints.length; i++) {
-            xPoints[i] = snakePoints[i].x;
+            xPoints[i] = snakePoints[i].getX();
+        }
+
+        double[] yPoints = new double[snakePoints.length];
+        for (int i = 0; i < yPoints.length; i++) {
+            yPoints[i] = snakePoints[i].getY();
         }
     }
 }
