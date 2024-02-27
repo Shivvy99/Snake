@@ -11,6 +11,7 @@ import java.awt.*;
 
 class Snake extends Game {
 	static int counter = 0;
+	private SnakeObject snake;
 
   public Snake() {
     super("Snake!",800,600);
@@ -28,6 +29,8 @@ class Snake extends Game {
     	counter++;
     	brush.setColor(Color.white);
     	brush.drawString("Counter is " + counter,10,10);
+		snake = new SnakeObject();
+		snake.paint(brush);
   }
   
 	public static void main (String[] args) {
