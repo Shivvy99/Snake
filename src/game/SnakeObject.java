@@ -1,7 +1,8 @@
 package game;
 
+import java.awt.*;
 import java.awt.Point.*;
-// 
+
 public class SnakeObject extends Polygon {
     final static Point[] snakePoints = {new Point(0, 0), new Point(0, 10),
             new Point(10, 10), new Point(10, 0)};
@@ -10,18 +11,20 @@ public class SnakeObject extends Polygon {
         super(snakePoints, new Point(0, 0), 0);
     }
 
-    public void paint() {
+    public void paint(Graphics brush) {
         Point[] snakePoints = this.getPoints();
 
-        double[] xPoints = new double[snakePoints.length];
+        int[] xPoints = new int[snakePoints.length];
         for (int i = 0; i < xPoints.length; i++) {
-            xPoints[i] = snakePoints[i].getX();
+            xPoints[i] = (int) snakePoints[i].getX();
         }
 
-        double[] yPoints = new double[snakePoints.length];
+        int[] yPoints = new int[snakePoints.length];
         for (int i = 0; i < yPoints.length; i++) {
-            yPoints[i] = snakePoints[i].getY();
+            yPoints[i] = (int) snakePoints[i].getY();
         }
+
+        brush.drawPolygon(xPoints, yPoints, xPoints.length);
     }
 }
 
