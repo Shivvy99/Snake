@@ -19,7 +19,7 @@ class Snake extends Game {
   }
   
 	public void paint(Graphics brush) {
-    	brush.setColor(Color.black);
+    	brush.setColor(Color.blue);
     	brush.fillRect(0,0,width,height);
     	
     	// sample code for printing message for debugging
