@@ -2,19 +2,27 @@ package game;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import javax.swing.Timer;
 
 public class SnakeObject extends Polygon implements KeyListener{
     final static Point[] spawnPoints = {new Point(0, 0), new Point(0,
             30),
             new Point(30, 30), new Point(30, 0)};
-    private Point[] snakePoints;
-    private static boolean north = true, east = false, south = false, west = false;
-
+    private ArrayList<Point> snakePoints;
+    private int direction = KeyEvent.VK_RIGHT;
+    private int speed = 1;
+    private Timer moveTimer;
 
 
     public SnakeObject() {
         super(spawnPoints, new Point(300, 300), 0.0);
-        snakePoints = spawnPoints;
+        snakePoints = new ArrayList<Point>();
+        for(Point point : spawnPoints) {
+            snakePoints.add(point);
+        }
+        moveTimer = new Timer(speed, e -> move());
+        moveTimer.start();
     }
 
     public void paint(Graphics brush) {
@@ -34,28 +42,50 @@ public class SnakeObject extends Polygon implements KeyListener{
 
     public void move() {
 
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
-    public void keyPressed(KeyEvent e) {
-        if (e.equals("VK_d") && !west) {
-            east = true; north = false; south = false;
-        } else if (e.equals("VK_a") && !east) {
-            west = true; north = false; south = false;
-        } else if (e.equals("VK_w") && !south) {
-            north = true; east = false; west = false;
-        } else if (e.equals("VK_s") && !north) {
-            south = true; east = false; west = false;
+        switch (direction) {
+            case KeyEvent.VK_UP:
+                translate(0, 20);
+                break;
+            case KeyEvent.VK_DOWN:
+                translate(0,-20);
+                break;
+            case KeyEvent.VK_LEFT:
+                translate(-20,0);
+                break;
+            case KeyEvent.VK_RIGHT:
+                translate(20,0);
+                break;
         }
 
     }
 
-    @Override
-    public void keyReleased(KeyEvent e) {
-
+    private void translate(int x, int y) {
+        for (Point p : snakePoints) {
+            p.x += x;
+            p.y += y;
+        }
     }
+
+
+    @Override
+    public void keyTyped(KeyEvent e) {}
+    @Override
+    public void keyReleased(KeyEvent e) {}
+
+    public void keyPressed(KeyEvent e) {
+        int key = e.getKeyCode();
+
+        if ((key == KeyEvent.VK_RIGHT) && (direction != KeyEvent.VK_LEFT)) {
+            direction = KeyEvent.VK_RIGHT;
+        } else if ((key == KeyEvent.VK_LEFT) && (direction != KeyEvent.VK_RIGHT)) {
+            direction = KeyEvent.VK_LEFT;
+        } else if ((key == KeyEvent.VK_UP) && (direction != KeyEvent.VK_DOWN)) {
+            direction = KeyEvent.VK_UP;
+        } else if ((key == KeyEvent.VK_DOWN) && (direction != KeyEvent.VK_UP)) {
+            direction = KeyEvent.VK_DOWN;
+        }
+    }
+
+
+
 }

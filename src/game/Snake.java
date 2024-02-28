@@ -1,8 +1,8 @@
 package game;
 
 /*
-CLASS: YourGameNameoids
-DESCRIPTION: Extending Game, YourGameName is all in the paint method.
+CLASS: Snake
+DESCRIPTION: Extending Game, Snake is all in the paint method.
 NOTE: This class is the metaphorical "main method" of your program,
       it is your control center.
 
@@ -13,11 +13,15 @@ class Snake extends Game {
 	static int counter = 0;
 	private SnakeObject snake;
 
+	public int score = 0;
+
 
   public Snake() {
     super("Snake!",600,600);
     this.setFocusable(true);
 	this.requestFocus();
+	snake = new SnakeObject();
+	this.addKeyListener(snake);
   }
   
 	public void paint(Graphics brush) {
