@@ -7,8 +7,8 @@ import javax.swing.Timer;
 
 public class SnakeObject extends Polygon implements KeyListener{
     final static Point[] spawnPoints = {new Point(0, 0), new Point(0,
-            30),
-            new Point(30, 30), new Point(30, 0)};
+            25),
+            new Point(25, 25), new Point(25, 0)};
     private ArrayList<Point> snakePoints;
     private int direction = KeyEvent.VK_RIGHT;
     private int speed = 1;
@@ -16,7 +16,7 @@ public class SnakeObject extends Polygon implements KeyListener{
 
 
     public SnakeObject() {
-        super(spawnPoints, new Point(300, 300), 0.0);
+        super(spawnPoints, new Point(232, 232), 0.0);
         snakePoints = new ArrayList<Point>();
         for(Point point : spawnPoints) {
             snakePoints.add(point);

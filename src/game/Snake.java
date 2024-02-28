@@ -17,7 +17,7 @@ class Snake extends Game {
 
 
   public Snake() {
-    super("Snake!",600,600);
+    super("Snake!",490,490);
     this.setFocusable(true);
 	this.requestFocus();
 	snake = new SnakeObject();
@@ -43,7 +43,7 @@ class Snake extends Game {
 		boolean isBlack = false;
 		int width = getWidth();
 		int height = getHeight();
-		int squareSize = 30;
+		int squareSize = 25;
 
 		for (int y = 0; y < height; y += squareSize) {
 			isBlack = !isBlack;
