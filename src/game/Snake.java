@@ -33,7 +33,6 @@ class Snake extends Game {
     	counter++;
 		brush.setColor(Color.BLUE);
     	brush.drawString("Counter is " + counter,10,10);
-		snake = new SnakeObject();
 		brush.setColor(Color.GREEN);
 		snake.paint(brush);
 
