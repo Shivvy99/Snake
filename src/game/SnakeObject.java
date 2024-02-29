@@ -9,8 +9,9 @@ public class SnakeObject extends Polygon implements KeyListener {
             25),
             new Point(25, 25), new Point(25, 0)};
 
-    private ArrayList<SnakeSegment> snakeSegments =
-            new ArrayList<SnakeSegment>();
+    private ArrayList<SnakeSegment> snakeSegments = new ArrayList<>();
+    private ArrayList<Point> positionsHistory = new ArrayList<>();
+
     private int direction = KeyEvent.VK_RIGHT;
     private Point[] snakePoints;
 
@@ -18,8 +19,30 @@ public class SnakeObject extends Polygon implements KeyListener {
         super(spawnPoints, new Point(250, 250), 0.0);
         snakePoints = spawnPoints.clone();
         snakeSegments.add(new SnakeSegment(new Point(250, 250)));
+        snakeSegments.add(new SnakeSegment(new Point(235, 250))); // Middle
+        snakeSegments.add(new SnakeSegment(new Point(220, 250))); // Tail
 
     }
+
+    public void move() {
+        // Temporary list to store the current positions of all segments
+        ArrayList<Point> currentPositions = new ArrayList<>();
+        for (SnakeSegment segment : snakeSegments) {
+            currentPositions.add(segment.getPosition());
+        }
+
+        // Calculate the next position for the head
+        Point nextPosition = getNextPosition();
+
+        // Move the head to the new position
+        snakeSegments.get(0).setPosition(nextPosition);
+
+        // Update the position of each subsequent segment to the previously stored position of the segment in front of it
+        for (int i = 1; i < snakeSegments.size(); i++) {
+            snakeSegments.get(i).setPosition(currentPositions.get(i - 1));
+        }
+    }
+
 
     public void paint(Graphics brush) {
 
@@ -27,14 +50,7 @@ public class SnakeObject extends Polygon implements KeyListener {
 
         // Iterate through each segment of the snake
         for (SnakeSegment segment : snakeSegments) {
-            Point position = segment.getPosition();
-
-            // Determine the size of each segment
-            int segmentSize = 10; // Example size, adjust as needed
-
-            // Draw each segment as a rectangle (or circle if you prefer)
-            brush.fillRect((int) position.x, (int) position.y, segmentSize,
-                    segmentSize);
+            segment.paint(brush);
         }
     }
 
@@ -52,20 +68,13 @@ public class SnakeObject extends Polygon implements KeyListener {
     }
 
     private Point getNextPosition() {
-        // Calculate next position based on current direction
-        // This is a simplified example. You'll need to adjust based on your grid/canvas size and direction.
-        Point currentPosition = snakeSegments.get(0).getPosition();
+        Point headPosition = snakeSegments.get(0).getPosition();
         switch (direction) {
-            case KeyEvent.VK_UP:
-                return new Point(currentPosition.x, currentPosition.y - 5);
-            case KeyEvent.VK_DOWN:
-                return new Point(currentPosition.x, currentPosition.y + 5);
-            case KeyEvent.VK_LEFT:
-                return new Point(currentPosition.x - 5, currentPosition.y);
-            case KeyEvent.VK_RIGHT:
-                return new Point(currentPosition.x + 5, currentPosition.y);
-            default:
-                return currentPosition; // No change if no valid direction is found
+            case KeyEvent.VK_UP: return new Point(headPosition.x, headPosition.y - 25);
+            case KeyEvent.VK_DOWN: return new Point(headPosition.x, headPosition.y + 25);
+            case KeyEvent.VK_LEFT: return new Point(headPosition.x - 25, headPosition.y);
+            case KeyEvent.VK_RIGHT: return new Point(headPosition.x + 25, headPosition.y);
+            default: return headPosition; // If no direction is pressed, don't move
         }
     }
 
@@ -107,11 +116,8 @@ public class SnakeObject extends Polygon implements KeyListener {
                 move();
                 brush.setColor(Color.GREEN);
                 brush.fillRect((int) position.x, (int) position.y, 25, 25);
-
-
-                // Getters and setters for position
-
             }
+
             public void move() {
                 if (!isGameOver()) {
                     switch (direction) {
