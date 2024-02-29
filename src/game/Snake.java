@@ -11,13 +11,12 @@ import java.awt.*;
 
 class Snake extends Game {
 	static int counter = 0;
-	private SnakeObject snake;
-
+	private static SnakeObject snake;
 	public int score = 0;
 
 
   public Snake() {
-    super("Snake!",490,490);
+    super("Snake!",500,500);
     this.setFocusable(true);
 	this.requestFocus();
 	snake = new SnakeObject();
@@ -59,9 +58,19 @@ class Snake extends Game {
 			}
 		}
 	}
+
+	public void update(Graphics brush) {
+	  if(!snake.isGameOver()) {
+		  super.update(brush);
+	  }
+
+	}
+
   
 	public static void main (String[] args) {
    		Snake a = new Snake();
 		a.repaint();
   }
+
+
 }

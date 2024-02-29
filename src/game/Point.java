@@ -9,7 +9,9 @@ DESCRIPTION: Ah, if only real-life classes were this straight-forward. We'll
 
 public class Point implements Cloneable {
   public double x,y;
-  public Point(double inX, double inY) { x = inX; y = inY; }
+  public Point(double inX, double inY) {
+    x = inX; y = inY;
+  }
   
   //added sjp
   public double getX(){ return x;}
