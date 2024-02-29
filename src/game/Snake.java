@@ -25,7 +25,7 @@ class Snake extends Game {
         this.requestFocus();
         snake = new SnakeObject();
         this.addKeyListener(snake);
-        apple = new Fruit((int)Math.random()*100, (int)Math.random()*100);
+        apple = new Fruit();
         timer = new Timer(100, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 snake.move();

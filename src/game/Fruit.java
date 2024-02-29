@@ -7,15 +7,34 @@ import java.io.IOException;
 import java.util.Objects;
 import javax.imageio.ImageIO;
 
-public class Fruit extends Polygon implements Consumables{
-    final static Point[] spawnPoints = {new Point(0, 0), new Point(0,
+public class Fruit extends Polygon implements Consumables {
+    final static Point[] sizePoints = {new Point(0, 0), new Point(0,
             25),
             new Point(25, 25), new Point(25, 0)};
     private BufferedImage appleImage;
-    public Fruit(int x, int y) {
 
-        super(spawnPoints, new Point(x, y), 0.0);
 
+    public Fruit() {
+        super(sizePoints, calculateSpawnPoint(), 0.0);
+        // calculated spawn point
+
+        try {
+            appleImage =
+                    ImageIO.read(new File("Snake/src/game/Images/apple.png")); //
+            // Adjust the path to your image file
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private static Point calculateSpawnPoint() {
+        int gridSize = 25;
+        int maxX = (500 / gridSize) - 1;
+        int maxY = (500 / gridSize) - 1;
+        int x = (int) (Math.random() * maxX) * gridSize;
+        int y = (int) (Math.random() * maxY) * gridSize;
+        return new Point(x, y);
     }
 
     public void increaseScore() {
@@ -26,12 +45,15 @@ public class Fruit extends Polygon implements Consumables{
 
     }
 
+
     @Override
     public void paint(Graphics brush) {
-        brush.setColor(Color.RED);
-        brush.fillRect((int) 250, (int) 250, 20, 20);
-
-        // Overlay the apple image on top of the square
-            brush.drawImage(appleImage, (int) 0, (int) 0, 20, 20, null);
+        if (appleImage != null) {
+            brush.drawImage(appleImage, (int) position.x, (int) position.y, 25,
+                    25, null);
+        } else {
+            brush.setColor(Color.RED);
+            brush.fillRect((int) position.x, (int) position.y, 25, 25);
+        }
     }
 }
