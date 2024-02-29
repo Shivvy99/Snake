@@ -16,7 +16,7 @@ public class SnakeObject extends Polygon implements KeyListener {
     private final int GAME_WIDTH = 500;
     private final int GAME_HEIGHT = 500;
     public SnakeObject() {
-        super(spawnPoints, new Point(250, 250), 0.0);
+        super(spawnPoints, new Point(250, 250), 5.0);
         snakePoints = spawnPoints.clone();
         snakeSegments.add(new SnakeSegment(new Point(250, 250)));
         snakeSegments.add(new SnakeSegment(new Point(235, 250))); // Middle

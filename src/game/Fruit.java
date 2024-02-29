@@ -2,9 +2,7 @@ package game;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 import javax.imageio.ImageIO;
 
 public class Fruit extends Polygon implements Consumables {
@@ -20,7 +18,7 @@ public class Fruit extends Polygon implements Consumables {
 
         try {
             appleImage =
-                    ImageIO.read(new File("Snake/src/game/Images/apple.png")); //
+                    ImageIO.read(Fruit.class.getResourceAsStream("/Images/apple.png")); //
             // Adjust the path to your image file
         } catch (IOException e) {
             e.printStackTrace();
@@ -49,7 +47,8 @@ public class Fruit extends Polygon implements Consumables {
     @Override
     public void paint(Graphics brush) {
         if (appleImage != null) {
-            brush.drawImage(appleImage, (int) position.x, (int) position.y, 25,
+            brush.drawImage((Image) appleImage, (int) position.x,
+                    (int) position.y, 25,
                     25, null);
         } else {
             brush.setColor(Color.RED);
