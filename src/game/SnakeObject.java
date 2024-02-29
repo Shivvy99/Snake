@@ -1,5 +1,6 @@
 package game;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -12,7 +13,8 @@ public class SnakeObject extends Polygon implements KeyListener {
     private ArrayList<Point> positionsHistory = new ArrayList<>();
     private int direction = KeyEvent.VK_RIGHT;
     private Point[] snakePoints;
-
+    private final int GAME_WIDTH = 500;
+    private final int GAME_HEIGHT = 500;
     public SnakeObject() {
         super(spawnPoints, new Point(250, 250), 0.0);
         snakePoints = spawnPoints.clone();
@@ -22,12 +24,12 @@ public class SnakeObject extends Polygon implements KeyListener {
     }
 
     public void move() {
-        Point previousPosition = snakeSegments.get(0).getPosition();
-        snakeSegments.get(0).setPosition(getNextPosition());
+        Point previousPosition = snakeSegments.get(0).position;
+        snakeSegments.get(0).position = getNextPosition();
 
         for (int i = 1; i < snakeSegments.size(); i++) {
-            Point currentPosition = snakeSegments.get(i).getPosition();
-            snakeSegments.get(i).setPosition(previousPosition);
+            Point currentPosition = snakeSegments.get(i).position;
+            snakeSegments.get(i).position = previousPosition;
             previousPosition = currentPosition;
         }
     }
@@ -40,15 +42,19 @@ public class SnakeObject extends Polygon implements KeyListener {
     }
 
     public boolean isGameOver() {
-        if (snakePoints[0].x < 0 || snakePoints[0].x > 500
-                || snakePoints[1].y < 0 || snakePoints[1].y > 500) {
+        if (getNextPosition().x < -25 || getNextPosition().x > GAME_WIDTH ||
+                getNextPosition().y < -25 || getNextPosition().y >= GAME_HEIGHT) {
+
+            EventQueue.invokeLater(() -> {
+                JOptionPane.showMessageDialog(null, "Game Over", "Snake", JOptionPane.INFORMATION_MESSAGE);
+            });
             return true;
         }
         return false;
     }
 
     private Point getNextPosition() {
-        Point headPosition = snakeSegments.get(0).getPosition();
+        Point headPosition = snakeSegments.get(0).position;
         switch (direction) {
             case KeyEvent.VK_UP:
                 return new Point(headPosition.x, headPosition.y - 25);
@@ -103,12 +109,5 @@ public class SnakeObject extends Polygon implements KeyListener {
             brush.fillRect((int) position.x, (int) position.y, 25, 25);
         }
 
-        public Point getPosition() {
-            return position;
-        }
-
-        public void setPosition(Point position) {
-            this.position = position;
-        }
     }
 }
