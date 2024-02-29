@@ -15,6 +15,7 @@ import javax.swing.Timer;
 class Snake extends Game {
     static int counter = 0;
     private static SnakeObject snake;
+    private Fruit apple;
     public int score = 0;
     private Timer timer;
 
@@ -24,6 +25,7 @@ class Snake extends Game {
         this.requestFocus();
         snake = new SnakeObject();
         this.addKeyListener(snake);
+        apple = new Fruit((int)Math.random()*100, (int)Math.random()*100);
         timer = new Timer(100, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 snake.move();
@@ -40,6 +42,7 @@ class Snake extends Game {
         brush.drawString("Counter is " + counter, 10, 10);
         brush.setColor(Color.GREEN);
         snake.paint(brush);
+        apple.paint(brush);
     }
 
     private void drawCheckeredBackground(Graphics g) {
