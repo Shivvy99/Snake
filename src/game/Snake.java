@@ -26,7 +26,7 @@ class Snake extends Game {
 	this.requestFocus();
 	snake = new SnakeObject();
 	this.addKeyListener(snake);
-		timer = new Timer(1000, new ActionListener() {
+		timer = new Timer(100, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				snake.move(); // This method will handle the snake's movement
 				repaint(); // Repaint the game to reflect the movement

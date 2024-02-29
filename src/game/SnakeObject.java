@@ -25,21 +25,21 @@ public class SnakeObject extends Polygon implements KeyListener {
     }
 
     public void move() {
-        // Temporary list to store the current positions of all segments
-        ArrayList<Point> currentPositions = new ArrayList<>();
-        for (SnakeSegment segment : snakeSegments) {
-            currentPositions.add(segment.getPosition());
-        }
+        Point previousPosition = snakeSegments.get(0).getPosition();
 
-        // Calculate the next position for the head
-        Point nextPosition = getNextPosition();
+        // Move the head based on the current direction.
+        snakeSegments.get(0).setPosition(getNextPosition());
 
-        // Move the head to the new position
-        snakeSegments.get(0).setPosition(nextPosition);
-
-        // Update the position of each subsequent segment to the previously stored position of the segment in front of it
+        // Then, for each of the body segments...
         for (int i = 1; i < snakeSegments.size(); i++) {
-            snakeSegments.get(i).setPosition(currentPositions.get(i - 1));
+            // Store the current position of this segment.
+            Point currentPosition = snakeSegments.get(i).getPosition();
+
+            // Move this segment to the previous position of the segment in front of it.
+            snakeSegments.get(i).setPosition(previousPosition);
+
+            // Update previousPosition for the next segment to use.
+            previousPosition = currentPosition;
         }
     }
 
@@ -113,29 +113,11 @@ public class SnakeObject extends Polygon implements KeyListener {
             }
 
             public void paint(Graphics brush) {
-                move();
                 brush.setColor(Color.GREEN);
                 brush.fillRect((int) position.x, (int) position.y, 25, 25);
             }
 
-            public void move() {
-                if (!isGameOver()) {
-                    switch (direction) {
-                        case KeyEvent.VK_UP:
-                            translate(0, -5);
-                            break;
-                        case KeyEvent.VK_DOWN:
-                            translate(0, 5);
-                            break;
-                        case KeyEvent.VK_LEFT:
-                            translate(-5, 0);
-                            break;
-                        case KeyEvent.VK_RIGHT:
-                            translate(5, 0);
-                            break;
-                    }
-                }
-            }
+
             public Point getPosition() {
                 return position;
             }
