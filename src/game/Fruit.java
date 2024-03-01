@@ -14,7 +14,6 @@ public class Fruit extends Polygon implements Consumables {
 
     public Fruit() {
         super(sizePoints, calculateSpawnPoint(), 0.0);
-        // calculated spawn point
 
         try {
             appleImage =

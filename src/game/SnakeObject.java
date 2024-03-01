@@ -5,6 +5,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class SnakeObject extends Polygon implements KeyListener {
     final static Point[] spawnPoints = {new Point(0, 0), new Point(0,
@@ -16,12 +19,32 @@ public class SnakeObject extends Polygon implements KeyListener {
     private Point[] snakePoints;
     private final int GAME_WIDTH = 500;
     private final int GAME_HEIGHT = 500;
+    private BufferedImage headUpImage;
+    private BufferedImage headDownImage;
+    private BufferedImage headLeftImage;
+    private BufferedImage headRightImage;
+    private BufferedImage bodyImage;
+    private BufferedImage bodyHorizontal;
+
     public SnakeObject() {
         super(spawnPoints, new Point(250, 250), 5.0);
         snakePoints = spawnPoints.clone();
         snakeSegments.add(new SnakeSegment(new Point(250, 250)));
         snakeSegments.add(new SnakeSegment(new Point(235, 250))); // Middle
         snakeSegments.add(new SnakeSegment(new Point(220, 250))); // Tail
+        try {
+            headUpImage = ImageIO.read(SnakeObject.class.getResourceAsStream("/Images/head.png"));
+            headDownImage = ImageIO.read(SnakeObject.class.getResourceAsStream("/Images/head_down.png"));
+            headLeftImage = ImageIO.read(SnakeObject.class.getResourceAsStream("/Images/head_left.png"));
+            headRightImage = ImageIO.read(SnakeObject.class.getResourceAsStream("/Images/head_right.png"));
+
+            // Load your body images for different directions
+            bodyImage = ImageIO.read(SnakeObject.class.getResourceAsStream("/Images/body.png"));
+            bodyHorizontal = ImageIO.read(SnakeObject.class.getResourceAsStream("/Images/body_horizontal.png"));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void move() {
@@ -41,11 +64,60 @@ public class SnakeObject extends Polygon implements KeyListener {
     }
 
     public void paint(Graphics brush) {
-        brush.setColor(Color.GREEN);
-        for (SnakeSegment segment : snakeSegments) {
-            segment.paint(brush);
+        BufferedImage headImage;
+        if (headUpImage != null) {
+            switch (direction) {
+                case KeyEvent.VK_UP:
+                    headImage = headUpImage;
+                    break;
+                case KeyEvent.VK_DOWN:
+                    headImage = headDownImage;
+                    break;
+                case KeyEvent.VK_LEFT:
+                    headImage = headLeftImage;
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    headImage = headRightImage;
+                    break;
+                default:
+                    headImage = headUpImage; // Default or initial direction
+            }
+
+            brush.drawImage(headImage, (int) snakeSegments.get(0).position.x, (int) snakeSegments.get(0).position.y, null);
+        } else {
+            brush.setColor(new Color(0, 255, 0, 128)); // Semi-transparent green
+            brush.fillRect((int) snakeSegments.get(0).position.x, (int) snakeSegments.get(0).position.y, 25, 25);
+        }
+
+        // Draw the body image for each segment starting from the second one
+        if (bodyImage != null) {
+            for (int i = 1; i < snakeSegments.size(); i++) {
+
+                // Draw the body image based on the direction
+                BufferedImage bodyDirectionImage;
+                switch (direction) {
+                    case KeyEvent.VK_UP:
+                    case KeyEvent.VK_DOWN:
+                        bodyDirectionImage = bodyImage;
+                        break;
+                    case KeyEvent.VK_LEFT:
+                    case KeyEvent.VK_RIGHT:
+                        bodyDirectionImage = bodyHorizontal;
+                        break;
+                    default:
+                        bodyDirectionImage = bodyImage; // Default or initial direction
+                }
+
+                brush.drawImage(bodyDirectionImage, (int) snakeSegments.get(i).position.x, (int) snakeSegments.get(i).position.y, null);
+            }
+        } else {
+            for (int i = 1; i < snakeSegments.size(); i++) {
+                brush.setColor(new Color(0, 255, 0, 128)); // Semi-transparent green
+                brush.fillRect((int) snakeSegments.get(i).position.x, (int) snakeSegments.get(i).position.y, 25, 25);
+            }
         }
     }
+
 
     public boolean isGameOver() {
         if (getNextPosition().x < -25 || getNextPosition().x > GAME_WIDTH ||
@@ -120,11 +192,6 @@ public class SnakeObject extends Polygon implements KeyListener {
         private void translate(int x, int y) {
             position.x = position.x + x;
             position.y = position.y + y;
-        }
-
-        public void paint(Graphics brush) {
-            brush.setColor(Color.GREEN);
-            brush.fillRect((int) position.x, (int) position.y, 25, 25);
         }
 
     }

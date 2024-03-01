@@ -45,29 +45,30 @@ class Snake extends Game {
         counter++;
         brush.setColor(Color.BLUE);
         brush.drawString("Counter is " + counter, 10, 10);
-        brush.setColor(Color.GREEN);
+        brush.setColor(Color.green);
         snake.paint(brush);
+        brush.setColor(Color.red);
         apple.paint(brush);
     }
 
     private void drawCheckeredBackground(Graphics g) {
-        boolean isBlack = false;
+        boolean isDarkBlue = false;
         int width = getWidth();
         int height = getHeight();
         int squareSize = 25;
 
         for (int y = 0; y < height; y += squareSize) {
-            isBlack = !isBlack;
+            isDarkBlue = !isDarkBlue;
 
             for (int x = 0; x < width; x += squareSize) {
-                if (isBlack) {
-                    g.setColor(Color.black);
+                if (isDarkBlue) {
+                    g.setColor(new Color(162, 209, 73));  // Dark Blue
                 } else {
-                    g.setColor(Color.WHITE);
+                    g.setColor(new Color(173, 216, 230));  // Light Blue
                 }
                 g.fillRect(x, y, squareSize, squareSize);
 
-                isBlack = !isBlack;
+                isDarkBlue = !isDarkBlue;
             }
         }
     }
