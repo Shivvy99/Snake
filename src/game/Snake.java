@@ -16,7 +16,7 @@ class Snake extends Game {
     static int counter = 0;
     private static SnakeObject snake;
     private Fruit apple;
-    public int score = 0;
+    private static int score = 0;
     private Timer timer;
 
     public Snake() {
@@ -29,10 +29,15 @@ class Snake extends Game {
         timer = new Timer(100, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 snake.move();
+                snake.appleCollision(apple);
                 repaint();
             }
         });
         timer.start();
+    }
+
+    public static void increaseScore() {
+        score++;
     }
 
     public void paint(Graphics brush) {

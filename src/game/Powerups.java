@@ -12,10 +12,6 @@ public class Powerups extends Polygon implements Consumables {
     public void increaseScore() {
 
     }
-    @Override
-    public void collisions() {
-
-    }
 
     @Override
     public void paint(Graphics brush) {

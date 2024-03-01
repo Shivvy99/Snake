@@ -1,5 +1,6 @@
 package game;
 
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -32,6 +33,11 @@ public class SnakeObject extends Polygon implements KeyListener {
             snakeSegments.get(i).position = previousPosition;
             previousPosition = currentPosition;
         }
+    }
+
+    public void extend() {
+        Point tail = snakeSegments.get(snakeSegments.size() - 1).position;
+        snakeSegments.add(new SnakeSegment(new Point(tail.x, tail.y)));
     }
 
     public void paint(Graphics brush) {
@@ -69,6 +75,14 @@ public class SnakeObject extends Polygon implements KeyListener {
         }
     }
 
+    public void appleCollision (Fruit apple) {
+        if (apple.contains(snakeSegments.get(0).position)) {
+            apple.position = Fruit.calculateSpawnPoint();
+            extend();
+            Snake.increaseScore();
+        }
+    }
+
     @Override
     public void keyTyped(KeyEvent e) {
     }
@@ -89,6 +103,10 @@ public class SnakeObject extends Polygon implements KeyListener {
         } else if ((key == KeyEvent.VK_DOWN) && (direction != KeyEvent.VK_UP)) {
             direction = KeyEvent.VK_DOWN;
         }
+    }
+
+    public ArrayList<SnakeSegment> getSnakeSegments() {
+        return snakeSegments;
     }
 
     public class SnakeSegment {

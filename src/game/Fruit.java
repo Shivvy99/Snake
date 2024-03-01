@@ -26,7 +26,7 @@ public class Fruit extends Polygon implements Consumables {
 
     }
 
-    private static Point calculateSpawnPoint() {
+    public static Point calculateSpawnPoint() {
         int gridSize = 25;
         int maxX = (500 / gridSize) - 1;
         int maxY = (500 / gridSize) - 1;
@@ -39,9 +39,7 @@ public class Fruit extends Polygon implements Consumables {
 
     }
 
-    public void collisions() {
 
-    }
 
 
     @Override
