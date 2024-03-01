@@ -8,14 +8,11 @@ public class Powerups extends Polygon implements Consumables {
         super(inShape, inPosition, inRotation);
     }
 
-    @Override
-    public void increaseScore() {
-
-    }
 
     @Override
     public void paint(Graphics brush) {
         brush.setColor(Color.RED);
 
     }
+
 }

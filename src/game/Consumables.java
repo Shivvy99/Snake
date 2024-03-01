@@ -4,7 +4,9 @@ import java.awt.*;
 
 public interface Consumables {
 
-    void increaseScore();
+    public void paint(Graphics brush);
 
-    void paint(Graphics brush);
+
+
+
 }

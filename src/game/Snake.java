@@ -19,6 +19,7 @@ class Snake extends Game {
     private static int score = 0;
     private Timer timer;
 
+
     public Snake() {
         super("Snake!", 500, 500);
         this.setFocusable(true);
@@ -40,6 +41,9 @@ class Snake extends Game {
         score++;
     }
 
+    public static int getScore() {
+        return score;
+    }
     public void paint(Graphics brush) {
         drawCheckeredBackground(brush);
         counter++;

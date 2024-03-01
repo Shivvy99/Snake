@@ -147,6 +147,8 @@ public class SnakeObject extends Polygon implements KeyListener {
 
             EventQueue.invokeLater(() -> {
                 JOptionPane.showMessageDialog(null, "Game Over", "Snake", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Score: " + Snake.getScore(), "Snake", JOptionPane.INFORMATION_MESSAGE);
+
             });
             return true;
         }
@@ -200,6 +202,7 @@ public class SnakeObject extends Polygon implements KeyListener {
     }
 
     public ArrayList<SnakeSegment> getSnakeSegments() {
+
         return snakeSegments;
     }
 

@@ -25,6 +25,7 @@ public class Fruit extends Polygon implements Consumables {
 
     }
 
+
     public static Point calculateSpawnPoint() {
         int gridSize = 25;
         int maxX = (500 / gridSize) - 1;
@@ -33,11 +34,6 @@ public class Fruit extends Polygon implements Consumables {
         int y = (int) (Math.random() * maxY) * gridSize;
         return new Point(x, y);
     }
-
-    public void increaseScore() {
-
-    }
-
 
 
 
