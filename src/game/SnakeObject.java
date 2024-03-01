@@ -93,7 +93,6 @@ public class SnakeObject extends Polygon implements KeyListener {
         if (bodyImage != null) {
             for (int i = 1; i < snakeSegments.size(); i++) {
 
-                // Draw the body image based on the direction
                 BufferedImage bodyDirectionImage;
                 switch (direction) {
                     case KeyEvent.VK_UP:
@@ -108,6 +107,12 @@ public class SnakeObject extends Polygon implements KeyListener {
                         bodyDirectionImage = bodyImage; // Default or initial direction
                 }
 
+                // Check if the current direction image is different from the previous segment's direction image
+                if (i > 1 && !bodyDirectionImage.equals(getDirectionImage(snakeSegments.get(i - 1).position, snakeSegments.get(i).position))) {
+                    // If different, use the previous segment's direction image
+                    bodyDirectionImage = getDirectionImage(snakeSegments.get(i - 1).position, snakeSegments.get(i).position);
+                }
+
                 brush.drawImage(bodyDirectionImage, (int) snakeSegments.get(i).position.x, (int) snakeSegments.get(i).position.y, null);
             }
         } else {
@@ -115,6 +120,23 @@ public class SnakeObject extends Polygon implements KeyListener {
                 brush.setColor(new Color(0, 255, 0, 128)); // Semi-transparent green
                 brush.fillRect((int) snakeSegments.get(i).position.x, (int) snakeSegments.get(i).position.y, 25, 25);
             }
+        }
+    }
+
+    private BufferedImage getDirectionImage(Point previousPosition, Point currentPosition) {
+        double x = currentPosition.x - previousPosition.x;
+        double y = currentPosition.y - previousPosition.y;
+
+        if (x > 0) {
+            return bodyHorizontal;  // Assuming bodyHorizontal is for right direction
+        } else if (x < 0) {
+            return bodyHorizontal;  // Assuming bodyHorizontal is for left direction
+        } else if (y > 0) {
+            return bodyImage;  // Assuming bodyImage is for down direction
+        } else if (y < 0) {
+            return bodyImage;  // Assuming bodyImage is for up direction
+        } else {
+            return bodyImage;  // Default or unchanged direction
         }
     }
 
@@ -147,7 +169,7 @@ public class SnakeObject extends Polygon implements KeyListener {
         }
     }
 
-    public void appleCollision (Fruit apple) {
+    public void appleCollision(Fruit apple) {
         if (apple.contains(snakeSegments.get(0).position)) {
             apple.position = Fruit.calculateSpawnPoint();
             extend();
