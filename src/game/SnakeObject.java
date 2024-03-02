@@ -15,16 +15,11 @@ public class SnakeObject extends Polygon implements KeyListener {
             new Point(25, 25), new Point(25, 0)};
     private ArrayList<SnakeSegment> snakeSegments = new ArrayList<>();
     private ArrayList<Point> positionsHistory = new ArrayList<>();
-    private int direction = KeyEvent.VK_RIGHT;
     private Point[] snakePoints;
-    private final int GAME_WIDTH = 500;
-    private final int GAME_HEIGHT = 500;
-    private BufferedImage headUpImage;
-    private BufferedImage headDownImage;
-    private BufferedImage headLeftImage;
-    private BufferedImage headRightImage;
-    private BufferedImage bodyImage;
-    private BufferedImage bodyHorizontal;
+    private int direction = KeyEvent.VK_RIGHT;
+    private final int GAME_WIDTH = 500, GAME_HEIGHT = 500;
+    private BufferedImage headUpImage, headDownImage, headLeftImage,
+            headRightImage, bodyImage, bodyHorizontal;
 
     public SnakeObject() {
         super(spawnPoints, new Point(250, 250), 5.0);
@@ -64,79 +59,52 @@ public class SnakeObject extends Polygon implements KeyListener {
     }
 
     public void paint(Graphics brush) {
-        BufferedImage headImage;
-        if (headUpImage != null) {
-            switch (direction) {
-                case KeyEvent.VK_UP:
-                    headImage = headUpImage;
-                    break;
-                case KeyEvent.VK_DOWN:
-                    headImage = headDownImage;
-                    break;
-                case KeyEvent.VK_LEFT:
-                    headImage = headLeftImage;
-                    break;
-                case KeyEvent.VK_RIGHT:
-                    headImage = headRightImage;
-                    break;
-                default:
-                    headImage = headUpImage; // Default or initial direction
-            }
-
-            brush.drawImage(headImage, (int) snakeSegments.get(0).position.x, (int) snakeSegments.get(0).position.y, null);
-        } else {
-            brush.setColor(new Color(0, 255, 0, 128)); // Semi-transparent green
-            brush.fillRect((int) snakeSegments.get(0).position.x, (int) snakeSegments.get(0).position.y, 25, 25);
-        }
+        // Determine head image based on the direction
+        BufferedImage headImage = getHeadImageForDirection();
+        brush.drawImage(headImage, (int) snakeSegments.get(0).position.x, (int)
+                snakeSegments.get(0).position.y, null);
 
         // Draw the body image for each segment starting from the second one
-        if (bodyImage != null) {
-            for (int i = 1; i < snakeSegments.size(); i++) {
-
-                BufferedImage bodyDirectionImage;
-                switch (direction) {
-                    case KeyEvent.VK_UP:
-                    case KeyEvent.VK_DOWN:
-                        bodyDirectionImage = bodyImage;
-                        break;
-                    case KeyEvent.VK_LEFT:
-                    case KeyEvent.VK_RIGHT:
-                        bodyDirectionImage = bodyHorizontal;
-                        break;
-                    default:
-                        bodyDirectionImage = bodyImage; // Default or initial direction
-                }
-
-                // Check if the current direction image is different from the previous segment's direction image
-                if (i > 1 && !bodyDirectionImage.equals(getDirectionImage(snakeSegments.get(i - 1).position, snakeSegments.get(i).position))) {
-                    // If different, use the previous segment's direction image
-                    bodyDirectionImage = getDirectionImage(snakeSegments.get(i - 1).position, snakeSegments.get(i).position);
-                }
-
-                brush.drawImage(bodyDirectionImage, (int) snakeSegments.get(i).position.x, (int) snakeSegments.get(i).position.y, null);
-            }
-        } else {
-            for (int i = 1; i < snakeSegments.size(); i++) {
-                brush.setColor(new Color(0, 255, 0, 128)); // Semi-transparent green
-                brush.fillRect((int) snakeSegments.get(i).position.x, (int) snakeSegments.get(i).position.y, 25, 25);
-            }
+        for (int i = 1; i < snakeSegments.size(); i++) {
+            BufferedImage bodyDirectionImage = getBodyImageForSegment(i);
+            brush.drawImage(bodyDirectionImage, (int) snakeSegments.get(i).position.x,
+                    (int) snakeSegments.get(i).position.y, null);
         }
     }
 
-    private BufferedImage getDirectionImage(Point previousPosition, Point currentPosition) {
-        double x = currentPosition.x - previousPosition.x;
-        double y = currentPosition.y - previousPosition.y;
+    private BufferedImage getHeadImageForDirection() {
+        if (headUpImage == null) {
+            return new BufferedImage(25, 25, BufferedImage.TYPE_INT_ARGB); // Return an empty image if head images are not loaded
+        }
+        switch (direction) {
+            case KeyEvent.VK_UP:
+                return headUpImage;
+            case KeyEvent.VK_DOWN:
+                return headDownImage;
+            case KeyEvent.VK_LEFT:
+                return headLeftImage;
+            case KeyEvent.VK_RIGHT:
+                return headRightImage;
+            default:
+                return headUpImage;
+        }
+    }
 
-        if (x > 0) {
-            return bodyHorizontal;  // Assuming bodyHorizontal is for right direction
-        } else if (x < 0) {
-            return bodyHorizontal;  // Assuming bodyHorizontal is for left direction
-        } else if (y > 0) {
-            return bodyImage;  // Assuming bodyImage is for down direction
-        } else if (y < 0) {
-            return bodyImage;  // Assuming bodyImage is for up direction
+    private BufferedImage getBodyImageForSegment(int segmentIndex) {
+        Point previousPosition = snakeSegments.get(segmentIndex - 1).position;
+        Point currentPosition = snakeSegments.get(segmentIndex).position;
+        double xDiff = currentPosition.x - previousPosition.x;
+        double yDiff = currentPosition.y - previousPosition.y;
+
+        if (xDiff > 0 || xDiff < 0) {
+            // Horizontal body image
+            return bodyHorizontal != null ? bodyHorizontal : new BufferedImage(25, 25, BufferedImage.TYPE_INT_ARGB);
+        } else if (yDiff > 0 || yDiff < 0) {
+            // Vertical body image
+            return bodyImage != null ? bodyImage : new BufferedImage(25, 25, BufferedImage.TYPE_INT_ARGB);
         } else {
-            return bodyImage;  // Default or unchanged direction
+            // Default body image
+            return bodyImage != null ? bodyImage : new BufferedImage(25, 25, BufferedImage.TYPE_INT_ARGB);
         }
     }
 
@@ -144,12 +112,6 @@ public class SnakeObject extends Polygon implements KeyListener {
     public boolean isGameOver() {
         if (getNextPosition().x < -25 || getNextPosition().x > GAME_WIDTH ||
                 getNextPosition().y < -25 || getNextPosition().y >= GAME_HEIGHT) {
-
-            EventQueue.invokeLater(() -> {
-                JOptionPane.showMessageDialog(null, "Game Over", "Snake", JOptionPane.INFORMATION_MESSAGE);
-                JOptionPane.showMessageDialog(null, "Score: " + Snake.getScore(), "Snake", JOptionPane.INFORMATION_MESSAGE);
-
-            });
             return true;
         }
         return false;
@@ -179,6 +141,20 @@ public class SnakeObject extends Polygon implements KeyListener {
         }
     }
 
+    public boolean snakeObjectCollision() {
+        Point head = snakeSegments.get(0).position;
+        for (int i = 1; i < snakeSegments.size(); i++) {
+            if (pointCollision(head, snakeSegments.get(i).position)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean pointCollision (Point p1, Point p2) {
+        return p1.x == p2.x && p1.y == p2.y;
+    }
+
     @Override
     public void keyTyped(KeyEvent e) {
     }
@@ -201,11 +177,6 @@ public class SnakeObject extends Polygon implements KeyListener {
         }
     }
 
-    public ArrayList<SnakeSegment> getSnakeSegments() {
-
-        return snakeSegments;
-    }
-
     public class SnakeSegment {
         private Point position;
 
@@ -213,11 +184,5 @@ public class SnakeObject extends Polygon implements KeyListener {
             this.position = position;
 
         }
-
-        private void translate(int x, int y) {
-            position.x = position.x + x;
-            position.y = position.y + y;
-        }
-
     }
 }
