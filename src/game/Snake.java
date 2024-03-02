@@ -31,7 +31,7 @@
                 public void actionPerformed(ActionEvent e) {
                     snake.move();
                     snake.appleCollision(apple);
-                    if (snake.snakeObjectCollision()) {
+                    if (snake.snakeObjectCollision() || snake.isGameOver()) {
                         timer.stop();
                         gameOverDialog();
                     } else {

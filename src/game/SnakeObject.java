@@ -141,10 +141,10 @@ public class SnakeObject extends Polygon implements KeyListener {
         }
     }
 
+
     public boolean snakeObjectCollision() {
-        Point head = snakeSegments.get(0).position;
         for (int i = 1; i < snakeSegments.size(); i++) {
-            if (pointCollision(head, snakeSegments.get(i).position)) {
+            if (pointCollision(snakeSegments.get(0).position, snakeSegments.get(i).position)) {
                 return true;
             }
         }
