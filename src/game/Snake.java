@@ -16,6 +16,7 @@
         static int counter = 0;
         private static SnakeObject snake;
         private Fruit apple;
+        private Powerups powerup1;
         private static int score = 0;
         private Timer timer;
 
@@ -27,10 +28,12 @@
             snake = new SnakeObject();
             this.addKeyListener(snake);
             apple = new Fruit();
+            powerup1 = new Powerups();
             timer = new Timer(100, new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     snake.move();
                     snake.appleCollision(apple);
+                    snake.powerup1Collision(powerup1);
                     if (snake.snakeObjectCollision() || snake.isGameOver()) {
                         timer.stop();
                         gameOverDialog();
@@ -66,6 +69,7 @@
             snake.paint(brush);
             brush.setColor(Color.red);
             apple.paint(brush);
+            powerup1.paint(brush);
         }
 
         private void drawCheckeredBackground(Graphics g) {

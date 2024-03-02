@@ -141,6 +141,14 @@ public class SnakeObject extends Polygon implements KeyListener {
         }
     }
 
+    public void powerup1Collision(Powerups powerup1) {
+        if (powerup1.contains(snakeSegments.get(0).position)) {
+            powerup1.position = Fruit.calculateSpawnPoint();
+            extend();
+            Snake.increaseScore();
+        }
+    }
+
 
     public boolean snakeObjectCollision() {
         for (int i = 1; i < snakeSegments.size(); i++) {
