@@ -4,25 +4,50 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Random;
+import javax.swing.*;
 
 public class Powerups extends Polygon implements Consumables {
     final static Point[] sizePoints = {new Point(0, 0), new Point(0,
             25),
             new Point(25, 25), new Point(25, 0)};
-    private BufferedImage powerup1;
+    private BufferedImage powerupImage;
+    private PowerupType type;
 
+    static PowerupType[] types = PowerupType.values();
 
     public Powerups() {
         super(sizePoints, calculateSpawnPoint(), 0.0);
+        setPowerupImage();
+    }
+
+    public void setPowerupImage() {
+        Random rand = new Random();
+        this.type = types[rand.nextInt(types.length)];
 
         try {
-            powerup1 =
-                    ImageIO.read(Powerups.class.getResourceAsStream("/Images/powerup1.png")); //
-            // Adjust the path to your image file
+            switch (this.type) {
+                case SHORTEN:
+                    powerupImage =
+                            ImageIO.read(getClass().getResourceAsStream(
+                                    "/Images/shorten.jpeg"));
+                    break;
+                case SPEED_BOOST:
+                    powerupImage =
+                            ImageIO.read(getClass().getResourceAsStream("/Images/speedBoost.png"));
+                    break;
+                case EXTRA_POINTS:
+                    powerupImage =
+                            ImageIO.read(getClass().getResourceAsStream(
+                                    "/Images/bonus.jpeg"));
+                    break;
+                default:
+                    powerupImage = null;
+            }
         } catch (IOException e) {
             e.printStackTrace();
+            powerupImage = null;
         }
-
     }
 
 
@@ -38,8 +63,8 @@ public class Powerups extends Polygon implements Consumables {
 
     @Override
     public void paint(Graphics brush) {
-        if (powerup1 != null) {
-            brush.drawImage((Image) powerup1, (int) position.x,
+        if (powerupImage != null) {
+            brush.drawImage((Image) powerupImage, (int) position.x,
                     (int) position.y, 25,
                     25, null);
         } else {
@@ -48,82 +73,26 @@ public class Powerups extends Polygon implements Consumables {
         }
     }
 
-    public class Effects {
-        private boolean invincibility;
-        private boolean shorter;
-        private boolean faster;
-        private boolean slower;
-        private int speedBoostDuration; // Duration for speed boost in game ticks
-        private int invincibilityDuration; // Duration for invincibility in game ticks
-
-        public Effects() {
-            invincibility = false;
-            shorter = false;
-            faster = false;
-            slower = false;
-            speedBoostDuration = 0;
-            invincibilityDuration = 0;
-        }
-
-        public void activateInvincibility(int duration) {
-            invincibility = true;
-            invincibilityDuration = duration;
-        }
-
-        public void deactivateInvincibility() {
-            invincibility = false;
-            invincibilityDuration = 0;
-        }
-
-        public void activateShorter() {
-            shorter = true;
-        }
-
-        public void deactivateShorter() {
-            shorter = false;
-        }
-
-        public void activateFaster(int duration) {
-            faster = true;
-            speedBoostDuration = duration;
-        }
-
-        public void deactivateFaster() {
-            faster = false;
-            speedBoostDuration = 0;
-        }
-
-        public void activateSlower(int duration) {
-            slower = true;
-            speedBoostDuration = duration;
-        }
-
-        public void deactivateSlower() {
-            slower = false;
-            speedBoostDuration = 0;
-        }
-
-        public void updateEffects() {
-            if (invincibility && invincibilityDuration > 0) {
-                invincibilityDuration--;
-                if (invincibilityDuration == 0) {
-                    deactivateInvincibility();
-                }
+    public static class ShortenSnake {
+        public static void apply(SnakeObject snake) {
+            if(snake.snakeSegments.size() > 3) {
+                snake.snakeSegments.remove(snake.snakeSegments.size() - 1);
             }
+        }
 
-            if (faster && speedBoostDuration > 0) {
-                speedBoostDuration--;
-                if (speedBoostDuration == 0) {
-                    deactivateFaster();
-                }
-            }
+    }
 
-            if (slower && speedBoostDuration > 0) {
-                speedBoostDuration--;
-                if (speedBoostDuration == 0) {
-                    deactivateSlower();
-                }
-            }
+    public PowerupType getType() {
+        return this.type;
+    }
+
+    public static class IncreaseSpeed {
+        public static void apply(SnakeObject snake) {
+            Snake.time = 50;
+            new Timer(2000, e -> {
+            Snake.time = 100;
+            }).start();
         }
     }
+
 }

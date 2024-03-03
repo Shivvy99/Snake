@@ -16,7 +16,9 @@
         static int counter = 0;
         private static SnakeObject snake;
         private Fruit apple;
-        private Powerups powerup1;
+        private Powerups powerUp;
+        protected static int time = 100;
+
         private static int score = 0;
         private Timer timer;
 
@@ -28,12 +30,12 @@
             snake = new SnakeObject();
             this.addKeyListener(snake);
             apple = new Fruit();
-            powerup1 = new Powerups();
-            timer = new Timer(100, new ActionListener() {
+            powerUp = new Powerups();
+            timer = new Timer(time, new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     snake.move();
                     snake.appleCollision(apple);
-                    snake.powerup1Collision(powerup1);
+                    snake.powerUpCollision(powerUp);
                     if (snake.snakeObjectCollision() || snake.isGameOver()) {
                         timer.stop();
                         gameOverDialog();
@@ -47,7 +49,7 @@
 
         private void gameOverDialog() {
             EventQueue.invokeLater(() -> {
-                JOptionPane.showMessageDialog(null, "Game Over\n" + "Score: " + getScore(), "Snake",  +
+                JOptionPane.showMessageDialog(null, "Game Over\n" + "Score: " + getScore(), "Snake",
                                 JOptionPane.INFORMATION_MESSAGE);
             });
 
@@ -69,7 +71,7 @@
             snake.paint(brush);
             brush.setColor(Color.red);
             apple.paint(brush);
-            powerup1.paint(brush);
+            powerUp.paint(brush);
         }
 
         private void drawCheckeredBackground(Graphics g) {
@@ -83,9 +85,9 @@
 
                 for (int x = 0; x < width; x += squareSize) {
                     if (isDarkBlue) {
-                        g.setColor(new Color(162, 209, 73));  // Dark Blue
+                        g.setColor(new Color(152, 251, 152, 192));
                     } else {
-                        g.setColor(new Color(173, 216, 230));  // Light Blue
+                        g.setColor(new Color(240, 255, 240, 255));
                     }
                     g.fillRect(x, y, squareSize, squareSize);
 

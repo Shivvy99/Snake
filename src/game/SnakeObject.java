@@ -13,7 +13,7 @@ public class SnakeObject extends Polygon implements KeyListener {
     final static Point[] spawnPoints = {new Point(0, 0), new Point(0,
             25),
             new Point(25, 25), new Point(25, 0)};
-    private ArrayList<SnakeSegment> snakeSegments = new ArrayList<>();
+    protected ArrayList<SnakeSegment> snakeSegments = new ArrayList<>();
     private ArrayList<Point> positionsHistory = new ArrayList<>();
     private Point[] snakePoints;
     private int direction = KeyEvent.VK_RIGHT;
@@ -21,12 +21,14 @@ public class SnakeObject extends Polygon implements KeyListener {
     private BufferedImage headUpImage, headDownImage, headLeftImage,
             headRightImage, bodyImage, bodyHorizontal;
 
+    protected static int speed = 25;
+
     public SnakeObject() {
         super(spawnPoints, new Point(250, 250), 5.0);
         snakePoints = spawnPoints.clone();
         snakeSegments.add(new SnakeSegment(new Point(250, 250)));
-        snakeSegments.add(new SnakeSegment(new Point(235, 250))); // Middle
-        snakeSegments.add(new SnakeSegment(new Point(220, 250))); // Tail
+        snakeSegments.add(new SnakeSegment(new Point(235, 250)));
+        snakeSegments.add(new SnakeSegment(new Point(220, 250)));
         try {
             headUpImage = ImageIO.read(SnakeObject.class.getResourceAsStream("/Images/head.png"));
             headDownImage = ImageIO.read(SnakeObject.class.getResourceAsStream("/Images/head_down.png"));
@@ -97,13 +99,10 @@ public class SnakeObject extends Polygon implements KeyListener {
         double yDiff = currentPosition.y - previousPosition.y;
 
         if (xDiff > 0 || xDiff < 0) {
-            // Horizontal body image
             return bodyHorizontal != null ? bodyHorizontal : new BufferedImage(25, 25, BufferedImage.TYPE_INT_ARGB);
         } else if (yDiff > 0 || yDiff < 0) {
-            // Vertical body image
             return bodyImage != null ? bodyImage : new BufferedImage(25, 25, BufferedImage.TYPE_INT_ARGB);
         } else {
-            // Default body image
             return bodyImage != null ? bodyImage : new BufferedImage(25, 25, BufferedImage.TYPE_INT_ARGB);
         }
     }
@@ -141,12 +140,29 @@ public class SnakeObject extends Polygon implements KeyListener {
         }
     }
 
-    public void powerup1Collision(Powerups powerup1) {
-        if (powerup1.contains(snakeSegments.get(0).position)) {
-            powerup1.position = Fruit.calculateSpawnPoint();
-            extend();
-            Snake.increaseScore();
+    public void powerUpCollision(Powerups powerup) {
+        if (powerup.contains(snakeSegments.get(0).position)) {
+            switch (powerup.getType()) {
+                case SHORTEN:
+                    Powerups.ShortenSnake.apply(this);
+                    break;
+                case SPEED_BOOST:
+                    Powerups.IncreaseSpeed.apply(this);
+                    break;
+                case EXTRA_POINTS:
+                    Snake.increaseScore();
+                    break;
+            }
+            powerup.position = Powerups.calculateSpawnPoint();
+            powerup.setPowerupImage();
         }
+    }
+
+    private void shortenSnake() {
+        if (snakeSegments.size() > 3) {
+            snakeSegments.remove(snakeSegments.size() - 1);
+        }
+
     }
 
 
