@@ -13,11 +13,10 @@
     import javax.swing.*;
 
     class Snake extends Game {
-        static int counter = 0;
         private static SnakeObject snake;
         private Fruit apple;
         private Powerups powerUp;
-        protected static int time = 100;
+        protected int time = 100;
 
         private static int score = 0;
         private Timer timer;
@@ -30,22 +29,27 @@
             snake = new SnakeObject();
             this.addKeyListener(snake);
             apple = new Fruit();
-            powerUp = new Powerups();
+            powerUp = new Powerups(this);
             timer = new Timer(time, new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    snake.move();
-                    snake.appleCollision(apple);
-                    snake.powerUpCollision(powerUp);
-                    if (snake.snakeObjectCollision() || snake.isGameOver()) {
-                        timer.stop();
-                        gameOverDialog();
-                    } else {
-                        repaint();
-                    }
+                     updateGame();
                 }
             });
             timer.start();
         }
+
+        protected void updateGame() {
+            snake.move();
+            snake.appleCollision(apple);
+            snake.powerUpCollision(powerUp);
+            if (snake.snakeObjectCollision() || snake.isGameOver()) {
+                timer.stop();
+                gameOverDialog();
+            } else {
+                repaint();
+            }
+        }
+
 
         private void gameOverDialog() {
             EventQueue.invokeLater(() -> {
@@ -53,6 +57,10 @@
                                 JOptionPane.INFORMATION_MESSAGE);
             });
 
+        }
+
+        public void setTime(int time) {
+            this.time = time;
         }
 
         public static void increaseScore() {
@@ -64,14 +72,13 @@
         }
         public void paint(Graphics brush) {
             drawCheckeredBackground(brush);
-            counter++;
-            brush.setColor(Color.BLUE);
-            brush.drawString("Counter is " + counter, 10, 10);
-            brush.setColor(Color.green);
-            snake.paint(brush);
-            brush.setColor(Color.red);
-            apple.paint(brush);
-            powerUp.paint(brush);
+            brush.setColor(Color.BLACK);
+            brush.drawString("Score: " + score, 10, 10);
+            if(snake != null) {
+                snake.paint(brush);
+                apple.paint(brush);
+                powerUp.paint(brush);
+            }
         }
 
         private void drawCheckeredBackground(Graphics g) {

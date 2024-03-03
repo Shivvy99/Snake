@@ -16,7 +16,7 @@ public class SnakeObject extends Polygon implements KeyListener {
     protected ArrayList<SnakeSegment> snakeSegments = new ArrayList<>();
     private ArrayList<Point> positionsHistory = new ArrayList<>();
     private Point[] snakePoints;
-    private int direction = KeyEvent.VK_RIGHT;
+    private int direction = KeyEvent.VK_RIGHT, lastDirection = KeyEvent.VK_RIGHT;
     private final int GAME_WIDTH = 500, GAME_HEIGHT = 500;
     private BufferedImage headUpImage, headDownImage, headLeftImage,
             headRightImage, bodyImage, bodyHorizontal;
@@ -53,6 +53,8 @@ public class SnakeObject extends Polygon implements KeyListener {
             snakeSegments.get(i).position = previousPosition;
             previousPosition = currentPosition;
         }
+        lastDirection = direction;
+
     }
 
     public void extend() {
@@ -147,10 +149,10 @@ public class SnakeObject extends Polygon implements KeyListener {
                     Powerups.ShortenSnake.apply(this);
                     break;
                 case SPEED_BOOST:
-                    Powerups.IncreaseSpeed.apply(this);
+                    Powerups.IncreaseSpeed.apply();
                     break;
                 case EXTRA_POINTS:
-                    Snake.increaseScore();
+                    Powerups.ExtraPoints.apply();
                     break;
             }
             powerup.position = Powerups.calculateSpawnPoint();
@@ -190,14 +192,14 @@ public class SnakeObject extends Polygon implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
 
-        if ((key == KeyEvent.VK_RIGHT) && (direction != KeyEvent.VK_LEFT)) {
-            direction = KeyEvent.VK_RIGHT;
-        } else if ((key == KeyEvent.VK_LEFT) && (direction != KeyEvent.VK_RIGHT)) {
-            direction = KeyEvent.VK_LEFT;
-        } else if ((key == KeyEvent.VK_UP) && (direction != KeyEvent.VK_DOWN)) {
-            direction = KeyEvent.VK_UP;
-        } else if ((key == KeyEvent.VK_DOWN) && (direction != KeyEvent.VK_UP)) {
-            direction = KeyEvent.VK_DOWN;
+        if ((key == KeyEvent.VK_RIGHT) && (lastDirection != KeyEvent.VK_LEFT)) {
+            direction = key;
+        } else if ((key == KeyEvent.VK_LEFT) && (lastDirection != KeyEvent.VK_RIGHT)) {
+            direction = key;
+        } else if ((key == KeyEvent.VK_UP) && (lastDirection != KeyEvent.VK_DOWN)) {
+            direction = key;
+        } else if ((key == KeyEvent.VK_DOWN) && (lastDirection != KeyEvent.VK_UP)) {
+            direction = key;
         }
     }
 

@@ -13,12 +13,13 @@ public class Powerups extends Polygon implements Consumables {
             new Point(25, 25), new Point(25, 0)};
     private BufferedImage powerupImage;
     private PowerupType type;
-
+    private static Snake snakeGame;
     static PowerupType[] types = PowerupType.values();
 
-    public Powerups() {
+    public Powerups(Snake snakeGame) {
         super(sizePoints, calculateSpawnPoint(), 0.0);
         setPowerupImage();
+        this.snakeGame = snakeGame;
     }
 
     public void setPowerupImage() {
@@ -34,7 +35,8 @@ public class Powerups extends Polygon implements Consumables {
                     break;
                 case SPEED_BOOST:
                     powerupImage =
-                            ImageIO.read(getClass().getResourceAsStream("/Images/speedBoost.png"));
+                            ImageIO.read(getClass().getResourceAsStream(
+                                    "/Images/speedBoost.png"));
                     break;
                 case EXTRA_POINTS:
                     powerupImage =
@@ -53,10 +55,10 @@ public class Powerups extends Polygon implements Consumables {
 
     public static Point calculateSpawnPoint() {
         int gridSize = 25;
-        int maxX = (500 / gridSize) - 1;
-        int maxY = (500 / gridSize) - 1;
-        int x = (int) (Math.random() * maxX) * gridSize;
-        int y = (int) (Math.random() * maxY) * gridSize;
+        int maxX = (500 / gridSize) - 2;
+        int maxY = (500 / gridSize) - 2;
+        int x = ((int) (Math.random() * maxX) + 1) * gridSize;
+        int y = ((int) (Math.random() * maxY) + 1) * gridSize;
         return new Point(x, y);
     }
 
@@ -72,6 +74,9 @@ public class Powerups extends Polygon implements Consumables {
             brush.fillRect((int) position.x, (int) position.y, 25, 25);
         }
     }
+    public PowerupType getType() {
+        return this.type;
+    }
 
     public static class ShortenSnake {
         public static void apply(SnakeObject snake) {
@@ -81,17 +86,17 @@ public class Powerups extends Polygon implements Consumables {
         }
 
     }
-
-    public PowerupType getType() {
-        return this.type;
+    public static class IncreaseSpeed {
+        public static void apply() {
+            snakeGame.updateGame();
+        }
     }
 
-    public static class IncreaseSpeed {
-        public static void apply(SnakeObject snake) {
-            Snake.time = 50;
-            new Timer(2000, e -> {
-            Snake.time = 100;
-            }).start();
+    public static class ExtraPoints {
+        public static void apply() {
+            for(int i = 0; i < 5; i++) {
+                Snake.increaseScore();
+            }
         }
     }
 
