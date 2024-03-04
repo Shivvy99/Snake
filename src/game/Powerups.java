@@ -1,13 +1,12 @@
 package game;
-/**
- * Shyam Ganapathy, Shiven Khanna
+/*
+  Shyam Ganapathy, Shiven Khanna
  */
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Random;
-import javax.swing.*;
 /**
  * This class represents the powerups used in our game. When the snake collides into a powerup, different effects are
  * applied to the snake. We extended the polygon class since this element is drawn using the polygon class. Additionally,
@@ -50,11 +49,20 @@ public class Powerups extends Polygon implements Consumables {
      *
      * @param snakeGame The instance of the Snake game.
      */
+
+    static Point spawnPoint = new Point((int) (Math.random() * 18) * 25, (int)
+            (Math.random() * 18) * 25);
+
     public Powerups(Snake snakeGame) {
-        super(sizePoints, calculateSpawnPoint(), 0.0);
+        super(sizePoints, spawnPoint, 0.0);
         setPowerupImage();
-        this.snakeGame = snakeGame;
+        Powerups.snakeGame = snakeGame;
     }
+
+    /**
+     * This method respawns the powerup at a new location on the screen.
+     */
+
 
     /**
      * Uses the random class to randomly select a number, 1-3 (length of enum types) and then outputs the appropriate
@@ -95,7 +103,7 @@ public class Powerups extends Polygon implements Consumables {
      *
      *  @return The calculated spawn point.
      */
-    public static Point calculateSpawnPoint() {
+    public Point calculateSpawnPoint() {
         int gridSize = 25;
         int maxX = (500 / gridSize) - 2;
         int maxY = (500 / gridSize) - 2;
@@ -103,6 +111,7 @@ public class Powerups extends Polygon implements Consumables {
         int y = ((int) (Math.random() * maxY) + 1) * gridSize;
         return new Point(x, y);
     }
+
 
     /**
      * If the image is not null, the image is overlayed onto the polygon using the drawImage() method. If it is null
@@ -113,7 +122,7 @@ public class Powerups extends Polygon implements Consumables {
     @Override
     public void paint(Graphics brush) {
         if (powerupImage != null) {
-            brush.drawImage((Image) powerupImage, (int) position.x,
+            brush.drawImage(powerupImage, (int) position.x,
                     (int) position.y, 25,
                     25, null);
         } else {

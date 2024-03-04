@@ -137,18 +137,13 @@ public class SnakeObject extends Polygon implements KeyListener {
      * @return The appropriate image orientation.
      */
     private BufferedImage getHeadImageForDirection() {
-        switch (direction) {
-            case KeyEvent.VK_UP:
-                return headUpImage;
-            case KeyEvent.VK_DOWN:
-                return headDownImage;
-            case KeyEvent.VK_LEFT:
-                return headLeftImage;
-            case KeyEvent.VK_RIGHT:
-                return headRightImage;
-            default:
-                return headUpImage;
-        }
+        return switch (direction) {
+            case KeyEvent.VK_UP -> headUpImage;
+            case KeyEvent.VK_DOWN -> headDownImage;
+            case KeyEvent.VK_LEFT -> headLeftImage;
+            case KeyEvent.VK_RIGHT -> headRightImage;
+            default -> headUpImage;
+        };
     }
 
     /**
@@ -200,11 +195,8 @@ public class SnakeObject extends Polygon implements KeyListener {
      * @return True if the game is over, false otherwise.
      */
     public boolean isGameOver() {
-        if (getNextPosition().x < -25 || getNextPosition().x > GAME_WIDTH ||
-                getNextPosition().y < -25 || getNextPosition().y >= GAME_HEIGHT) {
-            return true;
-        }
-        return false;
+        return getNextPosition().x < -25 || getNextPosition().x > GAME_WIDTH ||
+                getNextPosition().y < -25 || getNextPosition().y >= GAME_HEIGHT;
     }
     /**
      * Calculates and returns the next position that the snake's head will move to based on its current
@@ -214,18 +206,17 @@ public class SnakeObject extends Polygon implements KeyListener {
      */
     private Point getNextPosition() {
         Point headPosition = snakeSegments.get(0).position;
-        switch (direction) {
-            case KeyEvent.VK_UP:
-                return new Point(headPosition.x, headPosition.y - 25);
-            case KeyEvent.VK_DOWN:
-                return new Point(headPosition.x, headPosition.y + 25);
-            case KeyEvent.VK_LEFT:
-                return new Point(headPosition.x - 25, headPosition.y);
-            case KeyEvent.VK_RIGHT:
-                return new Point(headPosition.x + 25, headPosition.y);
-            default:
-                return headPosition;
-        }
+        return switch (direction) {
+            case KeyEvent.VK_UP ->
+                    new Point(headPosition.x, headPosition.y - 25);
+            case KeyEvent.VK_DOWN ->
+                    new Point(headPosition.x, headPosition.y + 25);
+            case KeyEvent.VK_LEFT ->
+                    new Point(headPosition.x - 25, headPosition.y);
+            case KeyEvent.VK_RIGHT ->
+                    new Point(headPosition.x + 25, headPosition.y);
+            default -> headPosition;
+        };
     }
     /**
      * This method checks if the snake object has collided into a fruit by using the contains() method. If the snake
@@ -236,7 +227,7 @@ public class SnakeObject extends Polygon implements KeyListener {
      */
     public void appleCollision(Fruit apple) {
         if (apple.contains(snakeSegments.get(0).position)) {
-            apple.position = Fruit.calculateSpawnPoint();
+            apple.position = apple.calculateSpawnPoint();
             extend();
             Snake.increaseScore();
         }
@@ -268,7 +259,7 @@ public class SnakeObject extends Polygon implements KeyListener {
             /**
              * These lines will ensure the powerup will be created in a new, random location after being collided in to.
              */
-            powerup.position = Powerups.calculateSpawnPoint();
+            powerup.position = powerup.calculateSpawnPoint();
             powerup.setPowerupImage();
         }
     }

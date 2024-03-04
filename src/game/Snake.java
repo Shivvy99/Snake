@@ -6,7 +6,8 @@ package game;
     /*
     CLASS: Snake
     DESCRIPTION: Extending Game, Snake is all in the paint method. The class initializes all the elements of the game,
-    such as the powerups, fruit, and snake. It also draws the backround and calls the pain methods for the appropriate
+    such as the powerups, fruit, and snake. It also draws the background and
+    calls the pain methods for the appropriate
     game elements.
     NOTE: This class is the metaphorical "main method" of your program,
           it is your control center.

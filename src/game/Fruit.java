@@ -2,6 +2,7 @@ package game;
 /**
  * Shyam Ganapathy, Shiven Khanna
  */
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -15,6 +16,9 @@ public class Fruit extends Polygon implements Consumables {
             25),
             new Point(25, 25), new Point(25, 0)};
 
+    static Point spawnPoint = new Point((int) (Math.random() * 18) * 25, (int)
+            (Math.random() * 18) * 25);
+
     /**
      * Is the apple image.
      */
@@ -26,7 +30,8 @@ public class Fruit extends Polygon implements Consumables {
      * an image of the apple.png in the images folder. If it cannot be found, an exception is thrown.
      */
     public Fruit() {
-        super(sizePoints, calculateSpawnPoint(), 0.0);
+        super(sizePoints, new Point((int) (Math.random() * 18) * 25, (int)
+                (Math.random() * 18) * 25), 0.0);
 
         try {
             appleImage =
@@ -37,12 +42,13 @@ public class Fruit extends Polygon implements Consumables {
 
     }
 
+
     /**
      * This method uses the Math class to randomly output the powerup on the screen.
      *
-     *  @return The calculated spawn point.
+     * @return The calculated spawn point.
      */
-    public static Point calculateSpawnPoint() {
+    public Point calculateSpawnPoint() {
         int gridSize = 25;
         int maxX = (500 / gridSize) - 1;
         int maxY = (500 / gridSize) - 1;
@@ -50,6 +56,7 @@ public class Fruit extends Polygon implements Consumables {
         int y = (int) (Math.random() * maxY) * gridSize;
         return new Point(x, y);
     }
+
 
 
     /**
