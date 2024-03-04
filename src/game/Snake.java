@@ -114,15 +114,6 @@ class Snake extends Game {
     }
 
     /**
-     * Sets the time interval for game updates.
-     *
-     * @param time The time interval in milliseconds.
-     */
-    public void setTime(int time) {
-        this.time = time;
-    }
-
-    /**
      * Increases the player's score.
      */
     public static void increaseScore() {
