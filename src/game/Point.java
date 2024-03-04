@@ -1,5 +1,7 @@
 package game;
-
+/**
+ * Shyam Ganapathy, Shiven Khanna
+ */
 /*
 CLASS: Point
 DESCRIPTION: Ah, if only real-life classes were this straight-forward. We'll

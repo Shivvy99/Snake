@@ -1,5 +1,7 @@
 package game;
-
+/**
+ * Shyam Ganapathy, Shiven Khanna
+ */
 /*
 CLASS: Game
 DESCRIPTION: A painted canvas in its own window, updated every tenth second.
